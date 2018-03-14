@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<clients>
-  <!-- ocr图片识别 -->
-  <client  id="OCRPost" target="OCR"></client>
-   <!-- ocr图片是否成功 -->
-  <client id="OCRReport" target="OCR"></client>
-</clients>
