@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" default-autowire="default"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:sca="http://www.springframework.org/schema/sca"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/sca http://www.osoa.org/xmlns/sca/1.0/spring-sca.xsd">
+
+	<context:component-scan base-package="com.dcits.app" />
+
+	<bean class="com.dcits.app.util.ApplicationContextUtils"
+		lazy-init="false" />
+
+	<bean class="com.digitalchina.spring.web.module.ProxyServlet"
+		lazy-init="false">
+		<property name="target">
+			<bean class="com.dcits.app.servlet.WebServlet" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>/servlet/webServlet</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.digitalchina.spring.web.module.ProxyServlet"
+		lazy-init="false">
+		<property name="target">
+			<bean class="com.dcits.app.servlet.FileUploadServlet" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>/servlet/fileUploadServlet</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.digitalchina.spring.web.module.ProxyServlet"
+		lazy-init="false">
+		<property name="target">
+			<bean class="com.dcits.app.servlet.FileDownloadServlet" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>/servlet/fileDownloadServlet</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.digitalchina.spring.web.module.ProxyServlet"
+		lazy-init="false">
+		<property name="target">
+			<bean class="com.dcits.app.servlet.YzmServlet" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>/servlet/yzmServlet</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="com.digitalchina.spring.web.module.ProxyServlet"
+		lazy-init="false">
+		<property name="target">
+			<bean class="com.dcits.app.servlet.GraphicalServlet" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>/servlet/graphicalServlet</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.digitalchina.spring.web.module.ProxyServlet"
+		lazy-init="false">
+		<property name="target">
+			<bean class="com.dcits.app.servlet.ClientIpServlet" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>/servlet/clientIpServlet</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="propertyMessageResources" class="com.dcits.app.resource.RegexPropertyMessageResources">
+		<property name="baseNames">
+			<list>
+				<value>classpath*:META-INF/properties/prop-*.properties</value>
+				<value>classpath:config.properties</value>
+				<value>classpath:config-authentication.properties</value>
+				<!-- <value>classpath:config-order.properties</value> -->
+				<!-- <value>classpath:config-player.properties</value> -->
+				<value>classpath:config-oss.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="sequenceFactory" class="com.dcits.app.sequence.SequenceFactory"
+		init-method="init" lazy-init="false">
+		<property name="sequenceFileLocations" value="classpath*:/META-INF/sequence/*.xml" />
+	</bean>
+
+	<bean id="app.service.commonService" class="com.dcits.app.service.CommonService" />
+
+	<bean id="app.xtcs.xtcsService" class="com.dcits.app.xtcs.XtcsService" />
+
+	<bean class="com.dcits.app.util.FileUtils" lazy-init="false">
+		<property name="access_bucketName" value="${access_bucketName}" />
+		<property name="access_id" value="${access_id}" />
+		<property name="access_key" value="${access_key}" />
+		<property name="oss_endpoint" value="${oss_endpoint}" />
+		<property name="oss_cname" value="${oss_cname}" />
+		<property name="proxyHost" value="${proxyHost}" />
+		<property name="proxyPort" value="${proxyPort}" />
+		<property name="isProxy" value="${isProxy}" />
+		<property name="expireDate" value="${expireDate}" />
+		<property name="storageType" value="${storageType}" />
+		<property name="localPath" value="${localPath}" />
+		<property name="ftp_host" value="${ftp_host}" />
+		<property name="ftp_port" value="${ftp_port}" />
+		<property name="ftp_username" value="${ftp_username}" />
+		<property name="ftp_password" value="${ftp_password}" />
+	</bean>
+
+	<bean id="sensitiveWordUtils" class="com.dcits.app.util.SensitiveWordUtils"
+		init-method="init" lazy-init="false">
+	</bean>
+
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+	</bean>
+
+	<bean id="lsCache01Factory" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="lsCache01" />
+	</bean>
+
+	<bean id="lsCache02Factory" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="lsCache02" />
+	</bean>
+
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="4096" />
+		<property name="maxIdle" value="200" />
+		<property name="maxWaitMillis" value="3000" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+	</bean>
+
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1" value="${redis_host}" />
+		<constructor-arg index="2" value="${redis_port}" type="int" />
+		<constructor-arg index="3" value="100000" />
+		<constructor-arg index="4" value="${redis_password}" />
+	</bean>
+
+</beans>

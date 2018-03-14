@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clients>
+
+<client id="newGetDataModel"  target="fpcy" />
+<client id="weixinGetSignatureService" target="weixinGetSignature" />
+<client id="newFpyzQueryInvoiceService" target="fpcy" />
+</clients>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" default-autowire="default"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:sca="http://www.springframework.org/schema/sca"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/sca http://www.osoa.org/xmlns/sca/1.0/spring-sca.xsd">
+
+	<bean id="fpcy.commons.dao.TaxOfficeDao" class="com.dcits.fpcy.commons.dao.TaxOfficeDao"></bean>
+	<bean id="fpcy.commons.dao.InvoiceDao" class="com.dcits.fpcy.commons.dao.InvoiceDao"></bean>
+	<bean id="fpcy.commons.dao.YzmDao" class="com.dcits.fpcy.commons.dao.YzmDao"></bean>
+	<bean id="fpcy.commons.service.CommonService" class="com.dcits.fpcy.commons.service.CommonService"
+		init-method="init" lazy-init="false">
+		<property name="taxOfficeDao" ref="fpcy.commons.dao.TaxOfficeDao"></property>
+		<property name="initInvoiceMap">
+			<map>
+				<entry key="10">
+					<map>
+						<entry key="invoiceTypeName" value="票种" />
+						<entry key="checkCode" value="校验码" />
+						<entry key="taxDiskCode" value="机器编号" />
+						<entry key="checkNum" value="查询次数" />
+						<entry key="salesName" value="(销售方)名称" />
+						<entry key="salesTaxpayerNum" value="(销售方)纳税人识别号" />
+						<entry key="salesTaxpayerAddress" value="(销售方)地址.电话" />
+						<entry key="salesTaxpayerBankAccount" value="(销售方)开户行及账号" />
+						<entry key="purchaserName" value="(购买方)名称" />
+						<entry key="taxpayerNumber" value="(购买方)纳税人识别号" />
+						<entry key="taxpayerAddressOrId" value="(购买方)地址.电话" />
+						<entry key="taxpayerBankAccount" value="(购买方)开户行及账号" />
+						<entry key="totalTaxNum" value="税额" />
+						<entry key="totalTaxSum" value="价税合计" />
+						<entry key="totalAmount" value="金额" />
+						<entry key="voidMark" value="是否作废" />
+						<entry key="invoiceRemarks" value="备注" />
+						<entry key="isBillMark" value="是否为清单票" />
+						<entry key="goodserviceName" value="货物或应税劳务名称" />
+						<entry key="unit" value="单位" />
+						<entry key="model" value="规格型号" />
+						<entry key="number" value="数量" />
+						<entry key="price" value="单价" />
+						<entry key="tax" value="税额" />
+						<entry key="taxRate" value="税率" />
+						<entry key="sum" value="金额" />
+						<entry key="billingTime" value="开票日期" />
+					</map>
+				</entry>
+				<entry key="03">
+					<map>
+						<entry key="invoiceTypeName" value="票种" />
+						<entry key="taxOfficeName" value="主管税务机关" />
+						<entry key="totalAmount" value="不含税价" />
+						<entry key="purchaserName" value="购买方名称" />
+						<entry key="producingArea" value="产地" />
+						<entry key="frameNumbr" value="车辆识别代号/车架号码" />
+						<entry key="salesTaxpayerNum" value="销方纳税人识别号" />
+						<entry key="salesTaxpayerTel" value="电话" />
+						<entry key="taxRate" value="增值税税率或征收率" />
+						<entry key="totalTaxNum" value="增值税税额" />
+						<entry key="limitNum" value="限乘人数" />
+						<entry key="engineNumber" value="发动机号码" />
+						<entry key="brandType" value="厂牌型号" />
+						<entry key="salesTaxpayerBank" value="开户银行" />
+						<entry key="totalTaxSum" value="价税合计" />
+						<entry key="salesTaxpayerAddress" value="地址" />
+						<entry key="taxDiskCode" value="机器编号" />
+						<entry key="taxpayerIdOrOrginCode" value="购买方身份证号码" />
+						<entry key="salesTaxpayerAccount" value="账号" />
+						<entry key="checkNum" value="查询次数" />
+						<entry key="salesName" value="销货单位名称" />
+						<entry key="certifNumber" value="合格证号" />
+						<entry key="voidMark" value="是否作废" />
+						<entry key="vehicleType" value="车辆类型" />
+						<entry key="billingTime" value="开票日期" />
+					</map>
+				</entry>
+				<entry key="11">
+					<map>
+						<entry key="invoiceTypeName" value="票种" />
+						<entry key="checkCode" value="校验码" />
+						<entry key="taxDiskCode" value="机器编号" />
+						<entry key="checkNum" value="查询次数" />
+						<entry key="salesName" value="(销售方)名称" />
+						<entry key="salesTaxpayerNum" value="(销售方)纳税人识别号" />
+						<entry key="purchaserName" value="(购买方)名称" />
+						<entry key="taxpayerNumber" value="(购买方)纳税人识别号" />
+						<entry key="machineNumber" value="机打号码" />
+						<entry key="goodsClerk" value="收货员" />
+						<entry key="totalTaxSum" value="价税合计" />
+						<entry key="voidMark" value="是否作废" />
+						<entry key="invoiceRemarks" value="备注" />
+						<entry key="goodserviceName" value="货物或应税劳务名称" />
+						<entry key="unit" value="单位" />
+						<entry key="model" value="规格型号" />
+						<entry key="number" value="数量" />
+						<entry key="price" value="单价" />
+						<entry key="tax" value="税额" />
+						<entry key="taxRate" value="税率" />
+						<entry key="sum" value="金额" />
+						<entry key="billingTime" value="开票日期" />
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="commons.factory.TaxOfficeFactory" class="com.dcits.fpcy.commons.factory.TaxOfficeFactory">
+		<property name="taxOfficeDao" ref="fpcy.commons.dao.TaxOfficeDao"></property>
+	</bean>
+	<bean id="commons.factory.YzmFactory" class="com.dcits.fpcy.commons.factory.YzmFactory">
+		<property name="taxOfficeDao" ref="fpcy.commons.dao.TaxOfficeDao"></property>
+	</bean>
+	<bean id="commons.factory.InvoiceFactory" class="com.dcits.fpcy.commons.factory.InvoiceFactory">
+		<property name="taxOfficeDao" ref="fpcy.commons.dao.TaxOfficeDao"></property>
+		<property name="invoiceDao" ref="fpcy.commons.dao.InvoiceDao"></property>
+		<property name="yzmFactory" ref="commons.factory.YzmFactory"></property>
+	</bean>
+
+    <bean  class="com.dcits.fpcy.commons.utils.HttpClient2" lazy-init="false">
+        <property name="proxyHost"  value="${fpcy.proxyHost}"/>
+        <property name="proxyPort"  value="${fpcy.proxyPort}"/>
+        <property name="isProxy"  value="${fpcy.isProxy}"/> 
+    </bean>
+   <bean  class="com.dcits.fpcy.commons.utils.AnalysisHttpClientUtils" lazy-init="false">
+        <property name="proxyHost"  value="${fpcy.proxyHost}"/>
+        <property name="proxyPort"  value="${fpcy.proxyPort}"/>
+        <property name="isProxy"  value="${fpcy.isProxy}"/> 
+    </bean>
+</beans>
+	
+

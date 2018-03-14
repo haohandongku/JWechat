@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clients>
+
+	<client id="Uc_Validate01" target="Uc" />
+	<client id="Uc_User01" target="Uc" />
+
+</clients>

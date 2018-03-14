@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="true"
+	monitoring="autodetect" dynamicConfig="true">
+
+	<diskStore path="java.io.tmpdir" />
+
+	<transactionManagerLookup
+		class="net.sf.ehcache.transaction.manager.DefaultTransactionManagerLookup"
+		properties="jndiName=java:/TransactionManager" propertySeparator=";" />
+
+	<cacheManagerEventListenerFactory
+		class="" properties="" />
+
+	<cacheManagerPeerProviderFactory
+		class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+		properties="peerDiscovery=automatic,
+                        multicastGroupAddress=230.0.0.1,
+                        multicastGroupPort=4446, timeToLive=32"
+		propertySeparator="," />
+
+	<cacheManagerPeerListenerFactory
+		class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory" />
+
+	<defaultCache 
+	    maxEntriesLocalHeap="10000" 
+	    eternal="false"
+		timeToIdleSeconds="120" 
+		timeToLiveSeconds="120" 
+		overflowToDisk="true"
+		diskSpoolBufferSizeMB="30" 
+		maxEntriesLocalDisk="10000000"
+		diskPersistent="false" 
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU" 
+		statistics="false" />
+
+	<cache name="lsCache01" 
+	       maxElementsInMemory="1000000" 
+	       eternal="false"
+		   overflowToDisk="true" 
+		   timeToIdleSeconds="0" 
+		   timeToLiveSeconds="600"
+		   memoryStoreEvictionPolicy="LFU" />
+    
+    <cache name="lsCache02" 
+	       maxElementsInMemory="1000000" 
+	       eternal="false"
+		   overflowToDisk="true" 
+		   timeToIdleSeconds="0" 
+		   timeToLiveSeconds="60"
+		   memoryStoreEvictionPolicy="LFU" />
+
+</ehcache>

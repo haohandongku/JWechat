@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" default-autowire="default"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:sca="http://www.springframework.org/schema/sca"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/sca http://www.osoa.org/xmlns/sca/1.0/spring-sca.xsd">
+	<bean id="httpUtils" class="com.dcits.ocr.commons.utils.HttpUtils"
+		lazy-init="false">
+		<property name="isProxy" value="${http.isProxy}"></property>
+		<property name="httpProxyUsername" value="${http.proxyUsername}"></property>
+		<property name="httpProxyPassword" value="${http.proxyPassword}"></property>
+		<property name="proxyHost" value="${http.proxyHost}"></property>
+		<property name="proxyPort" value="${http.proxyPort}"></property>
+	</bean>
+
+
+	<bean id="OCRDao" class="com.dcits.ocr.commons.dao.OCRDao"></bean>
+	<bean id="chaoJiYing" class="com.dcits.ocr.commons.service.impl.ChaoJiYing"
+		lazy-init="false">
+		<property name="userName" value="${ocr.cjy.username}"></property>
+		<property name="password" value="${ocr.cjy.password}"></property>
+		<property name="softId" value="${ocr.cjy.softid}"></property>
+		<property name="timeAdd" value="${ocr.cjy.time_add}"></property>
+		<property name="strDebug" value="${ocr.cjy.str_debug}"></property>
+	</bean>
+	<bean id="lianZhong" class="com.dcits.ocr.commons.service.impl.LianZhong"
+		lazy-init="false">
+		<property name="getDomainArray" value="${ocr.lz.GETDOMAINARRY}"></property>
+		<property name="userName" value="${ocr.lz.USERNAME}"></property>
+		<property name="password" value="${ocr.lz.PWD}"></property>
+		<property name="code" value="${ocr.lz.CODE}"></property>
+		<property name="toolToken" value="${ocr.lz.ZZTOOL_TOKEN}"></property>
+	</bean>
+
+	<bean id="OCRService" class="com.dcits.ocr.commons.service.OCRService">
+		<property name="ocrDao" ref="OCRDao"></property>
+		<property name="chaoJiYing" ref="chaoJiYing"></property>
+		<property name="lianZhong" ref="lianZhong"></property>
+	</bean>
+</beans>
+	
+

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.xtcs">
+
+	<select id="XtcsService_queryXtcsListTotal" parameterType="hashMap" resultType="int">
+		SELECT COUNT(1) 
+		FROM XT_XTCS X
+		WHERE X.JGBM=#{JGBM}
+		<if test="XTCS !='' and XTCS !=null">
+			AND (X.CSXH=#{XTCS} OR X.CSMC LIKE CONCAT('%',CONCAT(#{XTCS},'%')))
+		</if> 
+	</select>
+	
+	<select id="XtcsService_queryXtcsList" parameterType="hashMap" resultType="hashMap">
+		SELECT X.CSXH,X.CSMC,X.XYBZ,X.JZSZBZ,X.CSNR,X.SYSM  
+		FROM XT_XTCS X 
+		WHERE X.JGBM=#{JGBM}
+		<if test="XTCS !='' and XTCS !=null">
+			AND (X.CSXH=#{XTCS} OR X.CSMC LIKE CONCAT('%',CONCAT(#{XTCS},'%')))
+		</if> 
+	</select>
+	
+	<select id="XtcsService_checkExist" parameterType="hashMap" resultType="int">
+		SELECT COUNT(1) FROM XT_XTCS WHERE CSXH=#{CSXH}
+	</select>
+	
+	<insert id="XtcsService_saveXtcs" parameterType="hashMap">
+		INSERT INTO XT_XTCS 
+		(CSXH,CSMC,XYBZ,JZSZBZ,JGBM,CSNR,SYSM,LRRQ,LRR)
+		VALUES
+		(#{CSXH},#{CSMC},#{JZSZ},#{XYBZ},#{JGBM},#{CSNR},#{SYSM},SYSDATE(),#{LRR})
+	</insert>
+	
+	<update id="XtcsService_updateXtcs" parameterType="hashMap">
+		UPDATE XT_XTCS SET CSMC=#{CSMC},CSNR=#{CSNR},SYSM=#{SYSM},XYBZ=#{XYBZ},JZSZBZ=#{JZSZ},
+		XGR=#{LRR},XGRQ=SYSDATE() WHERE CSXH=#{CSXH}
+	</update>
+	
+	<delete id="XtcsService_deleteXtcs" parameterType="hashMap">
+		DELETE FROM XT_XTCS WHERE CSXH=#{CSXH}
+	</delete>
+	
+	<delete id="XtcsService_delSwsXtcs" parameterType="hashMap">
+		DELETE FROM XT_XTCS WHERE JGBM=#{QYBM} AND (CSXH=#{CSXH1} OR CSXH=#{CSXH2})
+	</delete>
+	
+	<insert id="XtcsService_initSwsXtcs" parameterType="list">
+		INSERT INTO XT_XTCS (CSXH,CSMC,JGBM,CSNR,SYSM,XYBZ,JZSZBZ,LRR,LRRQ) 
+		VALUES 
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.CSXH},#{item.CSMC},#{item.QYBM},#{item.CSNR},#{item.SYSM},'Y','Y',#{item.LRR},SYSDATE())
+		</foreach>
+	</insert>
+
+</mapper>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<!-- access-denied-page指向的页面不能在classes/work下 -->
+	<security:http auto-config="true" use-expressions="true"
+		entry-point-ref="localAuthenticationEntryPoint" access-denied-page="${adp.accessDenied.page}">
+		<security:intercept-url pattern="/servlet/webServlet"
+			access="permitAll" />
+		<security:form-login login-page="${adp.login.page}"
+			authentication-failure-url="${adp.login.page}" default-target-url="${adp.index.page}" />
+		<security:logout invalidate-session="true"
+			success-handler-ref="logoutSuccessHandler" />
+		<security:custom-filter ref="authenticationFilter"
+			before="FORM_LOGIN_FILTER" />
+		<security:custom-filter ref="filterSecurityInterceptor"
+			before="FILTER_SECURITY_INTERCEPTOR" />
+	</security:http>
+
+	<bean id="authenticationFilter" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces" value="javax.servlet.Filter" />
+		<property name="target" ref="localAuthenticationFilter" />
+	</bean>
+
+	<bean id="localAuthenticationFilter"
+		class="com.dcits.portal.spring.authentication.UsernamePasswordAuthenticationFilter">
+		<property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />
+		<property name="authenticationFailureHandler" ref="authenticationFailureHandler" />
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="filterProcessesUrl" value="/j_spring_security_login" />
+		<property name="usernameParameter" value="j_spring_security_username" />
+		<property name="passwordParameter" value="j_spring_security_password" />
+	</bean>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider
+			ref="authenticationProvider" />
+	</security:authentication-manager>
+
+	<bean id="authenticationSuccessRedirectStrategy"
+		class="org.springframework.security.web.DefaultRedirectStrategy">
+		<property name="contextRelative" value="${isRemoveContext}" />
+	</bean>
+
+	<bean id="logoutSuccessRedirectStrategy"
+		class="org.springframework.security.web.DefaultRedirectStrategy">
+		<property name="contextRelative" value="${isRemoveContext}" />
+	</bean>
+
+	<bean id="authenticationSuccessHandler"
+		class="com.dcits.portal.spring.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<property name="redirectStrategy" ref="authenticationSuccessRedirectStrategy" />
+		<property name="defaultTargetUrl" value="${adp.index.page}" />
+		<property name="listerner" ref="sampleAuthenticationSuccessListerner" />
+	</bean>
+
+	<bean id="logoutSuccessHandler"
+		class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+		<property name="redirectStrategy" ref="logoutSuccessRedirectStrategy" />
+		<property name="defaultTargetUrl" value="${adp.index.page}" />
+	</bean>
+
+	<bean id="sampleAuthenticationSuccessListerner"
+		class="com.dcits.portal.spring.listener.SampleAuthenticationSuccessListerner">
+		<property name="listenerNames">
+			<list />
+		</property>
+	</bean>
+
+	<bean id="authenticationFailureHandler"
+		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="${adp.login.page}" />
+		<property name="useForward" value="true" />
+	</bean>
+
+	<bean id="authenticationProvider" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"
+			value="org.springframework.security.authentication.AuthenticationProvider" />
+		<property name="target" ref="localAuthenticationProvider" />
+	</bean>
+
+	<bean id="localAuthenticationProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="localUserDetailsService" />
+		<property name="hideUserNotFoundExceptions" value="false" />
+		<property name="passwordEncoder" ref="passwordEncoder" />
+		<property name="saltSource" ref="saltSource" />
+	</bean>
+
+	<bean id="localUserDetailsService" class="com.dcits.portal.spring.userdetail.UserDetailsService" />
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder">
+	</bean>
+
+	<bean id="saltSource"
+		class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<property name="userPropertyToUse" value="username" />
+	</bean>
+
+	<bean id="localAuthenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<property name="loginFormUrl" value="${adp.login.page}" />
+	</bean>
+
+	<bean id="filterSecurityInterceptor"
+		class="com.dcits.portal.spring.intercept.FilterSecurityInterceptor">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+		<property name="securityMetadataSource" ref="securityMetadataSource" />
+	</bean>
+
+	<bean id="accessDecisionManager" class="com.dcits.portal.spring.access.AccessDecisionManager" />
+
+	<bean id="securityMetadataSource"
+		class="com.dcits.portal.spring.intercept.FilterInvocationSecurityMetadataSource">
+		<constructor-arg index="0">
+			<map />
+		</constructor-arg>
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:META-INF/messages_zh_CN" />
+	</bean>
+
+</beans>

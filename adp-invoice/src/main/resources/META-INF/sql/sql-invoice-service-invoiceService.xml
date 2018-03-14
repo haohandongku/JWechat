@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="invoice.service">
+	<select id="invoiceService_queryEnableQueryRegion" parameterType="map"
+		resultType="map">
+		SELECT DISTINCT dm_fpcycs.poolid poolid,dm_fpcycs.`swjg_mc`
+		swjg_mc,fpcy_enablequery.`query` query FROM fpcy_enablequery
+		,dm_fpcycs WHERE fpcy_enablequery.poolid=dm_fpcycs.poolid ORDER BY
+		dm_fpcycs.`swjg_mc` DESC
+	</select>
+	<!-- 查询接口信息 -->
+	<select id="invoiceService_queryEnableQuery" parameterType="map"
+		resultType="int">
+		SELECT count(*) from fpcy_enablequery where
+		swjg_dm=#{swjg_dm} AND fp_zl=#{fp_zl} AND poolid=#{poolid} AND
+		QUERY=#{query}
+	</select>
+	<select id="invoiceService_selectEnableQuery" parameterType="map"
+		resultType="int">
+		SELECT count(*) from fpcy_enablequery where
+		swjg_dm=#{swjg_dm} AND fp_zl=#{fp_zl} AND poolid=#{poolid}
+	</select>
+	<!-- 插入接口信息 -->
+	<insert id="invoiceService_addEnableQuery" parameterType="map">
+		INSERT
+		INTO fpcy_enablequery(swjg_dm,fp_zl,poolid,query)
+		VALUES(#{swjg_dm},#{fp_zl},#{poolid},#{query})
+	</insert>
+	<!-- 更改接口信息 -->
+	<update id="invoiceService_updateEnableQuery" parameterType="map">
+		update
+		fpcy_enablequery
+		SET
+		query = #{query}
+		where swjg_dm=#{swjg_dm} AND
+		fp_zl=#{fp_zl} AND poolid=#{poolid}
+
+	</update>
+	<!-- 查询页面显示信息 -->
+	<select id="invoiceService_queryMessage" parameterType="map"
+		resultType="int">
+		SELECT count(*) from fpcy_messages where mname=#{mname}
+	</select>
+	<select id="invoiceService_selectMessage" parameterType="map"
+		resultType="hashmap">
+		SELECT mbody from fpcy_messages where mname=#{mname}
+	</select>
+	<!-- 删除多余页面显示信息 -->
+	<delete id="invoiceService_deleteMessage" parameterType="map">
+		delete
+		from
+		fpcy_messages where mname=#{mname}
+	</delete>
+	<!-- 插入页面显示信息 -->
+	<insert id="invoiceService_addMessage" parameterType="map">
+		INSERT
+		INTO
+		fpcy_messages(mname,mbody)
+		VALUES(#{mname},#{mbody})
+	</insert>
+	<!-- 更改页面显示信息 -->
+	<update id="invoiceService_updateMessage" parameterType="map">
+		update
+		fpcy_messages
+		SET
+		mbody = #{mbody}
+		WHERE mname = #{mname}
+	</update>
+
+	<insert id="invoiceService_addStample" parameterType="map">
+		INSERT INTO FPCY_INVOICE_STAMPLE
+		(STAMPLEID,USERCODE,IPADDRESS,IMAGEPATH,INPUTTIME,INVOICETYPE,INVOICEREGION,INVOICECOMEFROM,phoneNumber,userName)
+		VALUES
+		(#{STAMPLEID},#{USERCODE},#{IPADDRESS},#{IMAGEPATH},SYSDATE(),#{INVOICETYPE},#{INVOICEREGION},#{INVOICECOMEFROM},#{PHONENUMBER},#{USERNAME})
+	</insert>
+	
+	<!-- 查询test -->
+	<select id="invoiceService_queryTest" parameterType="map" resultType="map">
+	  select cycs from cy_cyrz 
+	</select>
+	<insert id="invoiceService_insertTest1" parameterType="map">
+	 insert into test1 (fpdm,fphm,kprq,jym,kjje)
+	 value(#{fpdm},#{fphm},#{kprq},#{jym},#{kjje})
+	</insert>
+	<!-- 查询 -->
+	<select id="invoiceService_queryTest1" parameterType="map" resultType="map">
+	  select * from test1
+	</select>
+</mapper>

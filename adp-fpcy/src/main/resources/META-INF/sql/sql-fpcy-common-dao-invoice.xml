@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fpcy.common.dao">
+	<!-- 数据库读取查询过的发票 -->
+	<select id="InvoiceDao_QueryInvoiceInfo" parameterType="map"
+		resultType="hashmap">
+		SELECT CYJG,CYRQ,CYCS,invoiceResult FROM CY_CYRZ
+		WHERE fphm =#{fphm} AND  
+		fpdm=#{fpdm}  order by cyrq desc  
+	</select>
+	
+	<select id="InvoiceDao_QueryInvoiceErrorInfo" parameterType="map"
+		resultType="hashmap">
+		SELECT RZXX,CYRQ,INVOICEFALSESTATE FROM CY_CWRZ
+		WHERE id = #{id}
+	</select>
+
+	<!-- 保存请求日志 -->
+	<insert id="InvoiceDao_saveRequestLog" parameterType="map">
+		INSERT INTO
+		fpcy_cyrequest_log(key1,prompt,pic_id,serverIP)
+		VALUES(#{key1},#{prompt},#{pic_id},#{serverIP})
+	</insert>
+
+	<!-- 查验日志 -->
+	<insert id="InvoiceDao_saveQueryRecord" parameterType="map">
+		INSERT
+		INTO
+		CY_CYRZ(fpdm,fphm,cyjg,uid,cycs,cyrq,user_bm,qy,ip,requestId,useTime,invoiceComeFrom,invoiceResult)
+		VALUES(#{FPDM},#{FPHM},#{CYJG},#{UID},#{CYCS},sysdate(),#{USER_BM},#{QY},#{IP},#{requestId},#{useTime},#{INVOICECOMEFROM},#{invoiceResult})
+	</insert>
+
+	<!-- 错误日志 -->
+	<insert id="InvoiceDao_saveErrorRecord" parameterType="map">
+		INSERT
+		INTO
+		CY_CWRZ(fpdm,fphm,rzxx,uid,cycs,cyrq,qy,ip,requestId,useTime,invoiceComeFrom,invoicefalseState,invoiceResult)
+		VALUES(#{FPDM},#{FPHM},#{RZXX},#{UID},#{CYCS},sysdate(),#{QY},#{IP},#{requestId},#{useTime},#{invoiceComeFrom},#{invoicefalseState},#{invoiceResult})
+	</insert>
+	
+	<delete id="InvoiceDao_deleteQueryRecord" parameterType="map">
+		DELETE FROM CY_CYRZ
+		WHERE FPDM = #{FPDM} AND FPHM = #{FPHM}
+	</delete>
+	
+	<insert id="InvoiceDao_saveRequestRecord" parameterType="map">
+		INSERT INTO fpcy_requeststatistics_log 
+		(requestId,parameter,result,requestTime,expectTime,requestStatus,inputTime,invoiceType,fphm,fpdm,comeFromCode) 
+		VALUES(#{requestId},#{parameter},#{result},#{requestTime},#{expectTime},#{requestStatus},NOW(),#{invoiceType},#{fphm},#{fpdm},#{comeFromCode})
+	</insert>
+	<!-- 查询时间段之内的发票信息 -->
+	<select id="InvoiceDao_QueryInvoiceInfoByDate" parameterType="map"
+		resultType="hashmap">
+		SELECT CYJG,CYRQ,CYCS,invoiceResult FROM CY_CYRZ
+		WHERE CYRQ &gt; #{startTime} AND CYRQ &lt; #{endTime}
+	</select>
+	<!-- 查询今天是否有查询五次错误码 -->
+	<select id="InvoiceDao_getFalseInvoiceInfo"  parameterType="map"  resultType="int" >
+	   select 
+	       count(1) from cy_cwrz t
+	    where t.fpdm=#{fpdm} AND t.fphm=#{fphm} AND  t.invoicefalseState='202'
+        AND t.cyrq BETWEEN DATE_SUB(curdate(),INTERVAL 0 DAY)
+        AND DATE_SUB(curdate(),INTERVAL -1 DAY) 
+	</select>
+	
+	<!-- 查询今天是否有错误的数据 -->
+	<select id="InvoiceDao_getFalseInvoiceInfs"  parameterType="map"  resultType="map" >
+	   select 
+	       cycs,invoicefalseState from cy_cwrz t 
+	    where t.fpdm=#{fpdm} AND t.fphm=#{fphm} AND  t.invoicefalseState in('201','220')  
+        AND t.cyrq BETWEEN DATE_SUB(curdate(),INTERVAL 0 DAY) 
+        AND DATE_SUB(curdate(),INTERVAL -1 DAY) 
+	</select>
+	
+	<!-- 保存百望请求日志 -->
+	<insert id="InvoiceDao_saveBwRequestLog" parameterType="map">
+		INSERT
+		INTO fpcy_baiwang_request_log(invoiceNum,requestId,invoiceCode,invoiceName,requestType,requestConent,
+		errorMsg,errorCode,requestTime,isSuccess,comeFromCode,
+		inputTime)
+		VALUES(#{invoiceNum},#{requestId},#{invoiceCode},#{invoiceName},#{requestType},#{requestConent},
+		#{errorMsg},#{errorCode},#{requestTime},#{isSuccess},#{comeFromCode},
+		now())
+	</insert>
+</mapper>

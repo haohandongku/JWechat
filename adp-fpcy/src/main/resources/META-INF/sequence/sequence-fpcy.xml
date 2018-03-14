@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequencelist>
+<sequence name="SEQUENCE_NO" function="P_SEQUENCE_FPCY_NO" />
+<sequence name="SEQUENCE_REQUESTID" function="P_SEQUENCE_FPCY_REQUESTID" />
+</sequencelist>

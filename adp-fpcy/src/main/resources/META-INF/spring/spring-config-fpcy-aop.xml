@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" default-autowire="default"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:sca="http://www.springframework.org/schema/sca"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/sca http://www.osoa.org/xmlns/sca/1.0/spring-sca.xsd">
+
+	<!--记录 -->
+	<bean id="fpcy.commons.service.aop.LogService" class="com.dcits.fpcy.commons.service.aop.LogService">
+	</bean>
+	<bean class="com.digitalchina.spring.config.AspectJBeanFactoryPostProcessor">
+		<property name="adviceBeanName" value="fpcy.commons.service.aop.LogService" />
+		<property name="order" value="-1" />
+		<property name="pointcutExpressions">
+			<list>
+				<!-- 查询发票信息切面 -->
+				<value>execution(com.dcits.app.data.DataObject
+					com.dcits.fpcy.interfaces.QueryInvoiceInfo.doService(com.dcits.app.data.DataObject))
+				</value>
+				
+				<!-- 企业接口查询发票信息切面 -->
+				<value>execution(com.dcits.app.data.DataObject
+					com.dcits.fpcy.interfaces.QueryOpenInvoiceInfo.doService(com.dcits.app.data.DataObject))
+				</value>
+			</list>
+		</property>
+	</bean>
+	
+
+</beans>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app">
+
+	<select id="CommonService_getXzqh" parameterType="map" resultType="map">
+		SELECT XZQH_DM id, XZQH_MC text FROM DM_XZQH WHERE FXZQH_DM = #{FXZQH_DM} 
+		ORDER BY XZQH_DM 
+	</select>	
+
+    <select id="DateUtils_getDBtime" parameterType="map" resultType="String">
+        <if test="DBTEYP == 'MYSQL'">
+			  SELECT DATE_FORMAT(SYSDATE(), '%Y-%m-%d %H:%i:%s') XTRQ FROM DUAL 
+		</if>
+		<if test="DBTEYP == 'ORACLE'">
+			  SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') XTRQ FROM DUAL 
+		</if>		
+	</select>
+
+	<select id="SequenceGenerator_getSequence" parameterType="map" statementType="CALLABLE">
+		{call ${procedureName}(#{sequenceNumber,mode=OUT,jdbcType=VARCHAR},#{sequenceName,mode=IN,jdbcType=VARCHAR})}
+    </select>
+
+    <select id="XtSvcUtils_getXtcs" parameterType="map" resultType="map">
+		SELECT CSNR, SYSM 
+		FROM XT_XTCS 
+		WHERE CSXH = #{CSXH} AND JGBM = #{JGBM} AND XYBZ = 'Y'
+	</select>	
+	
+	<select id="IPUtils_queryIpCode" parameterType="map" resultType="map">
+		SELECT cityCode            
+		FROM ip_code   
+		WHERE  #{ipNum} &gt;= startIp AND #{ipNum} &lt;= endIp 	
+	</select>
+	
+</mapper>

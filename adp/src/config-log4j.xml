@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<log4j:configuration>
+
+	<appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}:%p %t %c - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+	<appender name="debugAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="../logs/adp-debug.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="BufferedIO" value="false" />
+		<param name="BufferSize" value="8192" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}:%p %t %c - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+	<appender name="errorAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="../logs/adp-error.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="BufferedIO" value="false" />
+		<param name="BufferSize" value="8192" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}:%p %t %c - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+	<logger name="org.springframework" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="debugAppender" />
+		<appender-ref ref="errorAppender" />
+	</logger>
+
+	<logger name="org.mybatis" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="debugAppender" />
+		<appender-ref ref="errorAppender" />
+	</logger>
+
+	<logger name="org.apache.ibatis" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="debugAppender" />
+		<appender-ref ref="errorAppender" />
+	</logger>
+
+	<logger name="com.digitalchina" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="debugAppender" />
+		<appender-ref ref="errorAppender" />
+	</logger>
+
+	<logger name="com.dcits" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="debugAppender" />
+		<appender-ref ref="errorAppender" />
+	</logger>
+    <logger name="com.dcits.ieds" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="debugAppender" />
+		<appender-ref ref="errorAppender" />
+	</logger>
+	<root>
+		<level value="ERROR" />
+	</root>
+
+</log4j:configuration>
